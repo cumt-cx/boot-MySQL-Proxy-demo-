@@ -1,5 +1,7 @@
 package cc.qianglovepei.common;
 
+import cc.qianglovepei.util.DateUtil;
+
 import java.util.Date;
 
 public class Result<T> {
@@ -15,7 +17,7 @@ public class Result<T> {
 
     private String url;
 
-    private Date serverTime;
+    private String serverTime;
 
     public Integer getCode() {
         return code;
@@ -57,11 +59,11 @@ public class Result<T> {
         this.url = url;
     }
 
-    public Date getServerTime() {
+    public String getServerTime() {
         return serverTime;
     }
 
-    public void setServerTime(Date serverTime) {
+    public void setServerTime(String serverTime) {
         this.serverTime = serverTime;
     }
 
@@ -70,7 +72,7 @@ public class Result<T> {
         result.setCode(OK);
         result.setMessage("请求成功");
         result.setData(data);
-        result.setServerTime(new Date());
+        result.setServerTime(DateUtil.convertDateToStr(new Date(),"yyyy-MM-dd hh:mm:ss"));
         return result;
     }
 }
