@@ -1,5 +1,7 @@
 package cc.qianglovepei.web;
 
+import cc.qianglovepei.common.Result;
+import cc.qianglovepei.exception.MyException;
 import cc.qianglovepei.model.User;
 import cc.qianglovepei.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +17,19 @@ public class testController {
 
     @ResponseBody
     @RequestMapping(value = "/",method = RequestMethod.GET)
-    public String home() {
-        return "Hello World!";
+    public Result<String> home() {
+        return Result.Success("hello World!");
+    }
+
+    @RequestMapping(value = "/error",method = RequestMethod.GET)
+    public void getError() throws Exception{
+        throw new MyException("测试错误");
     }
 
     @ResponseBody
     @RequestMapping(value="/getAllUser",method = RequestMethod.GET)
-    public List<User> getAllUser(){
-        return userService.findAllUser();
+    public Result<List<User>> getAllUser(){
+        return Result.Success(userService.findAllUser());
     }
 
 
