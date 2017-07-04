@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: proxy Demo
+
+server:
+  port: 8080
+
+datasource:
+  write:
+    name: write
+    url: jdbc:mysql://localhost:3306/user_write?useSSL=false&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: root
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+  read1:
+    name: read1
+    url: jdbc:mysql://localhost:3306/user_read1?useSSL=false&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: root
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+
+  read2:
+    name: read2
+    url: jdbc:mysql://localhost:3306/user_read2?useSSL=false&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: root
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+    type-aliases-package: cc.qianglovepei.model
+    mapper-locations: classpath:mapper/*.xml
+    configuration:
+        mapUnderscoreToCamelCase: true
+        useColumnLabel : true
+        useGeneratedKeys: true
