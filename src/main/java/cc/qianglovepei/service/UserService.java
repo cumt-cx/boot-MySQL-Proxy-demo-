@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserService {
 
-    Integer login(String userName,String passWord);
+    Integer login(String userName, String passWord);
 
     User findByName(String userName);
 

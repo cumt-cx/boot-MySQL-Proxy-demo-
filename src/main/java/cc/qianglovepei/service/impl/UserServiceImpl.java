@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
 
     @Override public Integer login(String userName, String passWord) {
-        return userMapper.login(userName,passWord);
+        return userMapper.login(userName, passWord);
     }
 
     @Override public User findByName(String userName) {
@@ -25,13 +25,13 @@ public class UserServiceImpl implements UserService{
 
     @Override public List<User> findAllUser() {
         String currentDataSource = DataSourceConfig.DynamicDataSource.getCurrentLookupKey();
-        System.out.println("findAllUser 的数据源是["+currentDataSource+"]");
+        System.out.println("findAllUser 的数据源是[" + currentDataSource + "]");
         return userMapper.findAllUser();
     }
 
     @Override public Integer save(User user) {
         String currentDataSource = DataSourceConfig.DynamicDataSource.getCurrentLookupKey();
-        System.out.println("save 的数据源是["+currentDataSource+"]");
+        System.out.println("save 的数据源是[" + currentDataSource + "]");
         return userMapper.save(user);
     }
 

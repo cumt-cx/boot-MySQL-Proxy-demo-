@@ -16,26 +16,26 @@ public class testController {
     private UserService userService;
 
     @ResponseBody
-    @RequestMapping(value = "/",method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public Result<String> home() {
         return Result.Success("hello World!");
     }
 
-    @RequestMapping(value = "/error",method = RequestMethod.GET)
-    public void getError() throws Exception{
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public void getError() throws Exception {
         throw new MyException("测试错误");
     }
 
     @ResponseBody
-    @RequestMapping(value="/getAllUser",method = RequestMethod.GET)
-    public Result<List<User>> getAllUser(){
+    @RequestMapping(value = "/getAllUser", method = RequestMethod.GET)
+    public Result<List<User>> getAllUser() {
         return Result.Success(userService.findAllUser());
     }
 
 
     @ResponseBody
-    @RequestMapping(value="/user",method = RequestMethod.POST)
-    public void saveUser(@RequestBody User user){
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    public void saveUser(@RequestBody User user) {
         userService.save(user);
     }
 

@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
-
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,40 +31,6 @@ public class DataSourceConfig {
 
     private static final String DATASOURCE_READ2 = "read2";
 
-    public static class DynamicDataSource extends AbstractRoutingDataSource implements BeanFactoryAware{
-
-        private BeanFactory beanFactory;
-
-        private static ThreadLocal<String> currentLookupKeyLocal = new ThreadLocal<String>();
-
-        @Override
-        protected Object determineCurrentLookupKey() {
-            return currentLookupKeyLocal.get();
-        }
-
-        public static void setCurrentLookupKey(String key) {
-            currentLookupKeyLocal.set(key);
-        }
-
-        public static String getCurrentLookupKey() {
-            return currentLookupKeyLocal.get();
-        }
-
-        @Override
-        public void afterPropertiesSet() {
-            //
-            Map<String, DataSource> targetDataSources = BeanFactoryUtils.beansOfTypeIncludingAncestors((ListableBeanFactory) beanFactory, DataSource.class);
-            super.setTargetDataSources(new HashMap<Object, Object>(targetDataSources));
-            //
-            super.afterPropertiesSet();
-        }
-
-        @Override
-        public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-            this.beanFactory = beanFactory;
-        }
-    }
-
     @Bean
     @Primary
     public DataSource dynamicDataSource() {
@@ -75,19 +40,19 @@ public class DataSourceConfig {
     }
 
     @Bean(DATASOURCE_WRITE)
-    @ConfigurationProperties(prefix="datasource.write")
+    @ConfigurationProperties(prefix = "datasource.write")
     public DataSource WriteDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean(DATASOURCE_READ1)
-    @ConfigurationProperties(prefix="datasource.read1")
+    @ConfigurationProperties(prefix = "datasource.read1")
     public DataSource Read1DataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean(DATASOURCE_READ2)
-    @ConfigurationProperties(prefix="datasource.read2")
+    @ConfigurationProperties(prefix = "datasource.read2")
     public DataSource Read2DataSource() {
         return DataSourceBuilder.create().build();
     }
@@ -95,6 +60,40 @@ public class DataSourceConfig {
     @Bean
     public WRInterceptor mapperInterceptor() {
         return new WRInterceptor();
+    }
+
+    public static class DynamicDataSource extends AbstractRoutingDataSource implements BeanFactoryAware {
+
+        private static ThreadLocal<String> currentLookupKeyLocal = new ThreadLocal<String>();
+        private BeanFactory beanFactory;
+
+        public static String getCurrentLookupKey() {
+            return currentLookupKeyLocal.get();
+        }
+
+        public static void setCurrentLookupKey(String key) {
+            currentLookupKeyLocal.set(key);
+        }
+
+        @Override
+        protected Object determineCurrentLookupKey() {
+            return currentLookupKeyLocal.get();
+        }
+
+        @Override
+        public void afterPropertiesSet() {
+            //
+            Map<String, DataSource> targetDataSources = BeanFactoryUtils
+                    .beansOfTypeIncludingAncestors((ListableBeanFactory) beanFactory, DataSource.class);
+            super.setTargetDataSources(new HashMap<Object, Object>(targetDataSources));
+            //
+            super.afterPropertiesSet();
+        }
+
+        @Override
+        public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+            this.beanFactory = beanFactory;
+        }
     }
 
     @Aspect
@@ -107,12 +106,12 @@ public class DataSourceConfig {
             if (isSlave(methodName)) {
                 // 标记为读库,可以自定义选择数据源
                 Random random = new Random();
-                int randomNum=random.nextInt(3);
-                if(randomNum == 0){
+                int randomNum = random.nextInt(3);
+                if (randomNum == 0) {
                     DynamicDataSource.setCurrentLookupKey(DATASOURCE_READ1);
-                }else if(randomNum == 1){
+                } else if (randomNum == 1) {
                     DynamicDataSource.setCurrentLookupKey(DATASOURCE_READ2);
-                }else if(randomNum == 2){
+                } else if (randomNum == 2) {
                     DynamicDataSource.setCurrentLookupKey(DATASOURCE_WRITE);
                 }
             } else {
@@ -130,7 +129,7 @@ public class DataSourceConfig {
          */
         private Boolean isSlave(String methodName) {
             // 方法名以query、find、get开头的方法名走从库
-            return StringUtils.startsWithAny(methodName, new String[]{"query", "find", "get"});
+            return StringUtils.startsWithAny(methodName, new String[] { "query", "find", "get" });
         }
 
     }

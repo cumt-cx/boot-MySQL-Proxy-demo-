@@ -1,7 +1,6 @@
 package cc.qianglovepei.exception;
 
 import cc.qianglovepei.common.Result;
-import cc.qianglovepei.util.DateUtil;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,7 +19,7 @@ public class GlobalExceptionHandler {
         r.setCode(Result.ERROR);
         r.setData("Some Data");
         r.setUrl(req.getRequestURI());
-        r.setServerTime(DateUtil.convertDateToStr(new Date(),"yyyy-MM-dd hh:mm:ss"));
+        r.setServerTime(new Date());
         return r;
     }
 

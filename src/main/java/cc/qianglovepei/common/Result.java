@@ -1,6 +1,6 @@
 package cc.qianglovepei.common;
 
-import cc.qianglovepei.util.DateUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
@@ -17,7 +17,25 @@ public class Result<T> {
 
     private String url;
 
-    private String serverTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date serverTime;
+
+    public static Integer getOK() {
+        return OK;
+    }
+
+    public static Integer getERROR() {
+        return ERROR;
+    }
+
+    public static <T> Result<T> Success(T data) {
+        Result result = new Result();
+        result.setCode(OK);
+        result.setMessage("请求成功");
+        result.setData(data);
+        result.setServerTime(new Date());
+        return result;
+    }
 
     public Integer getCode() {
         return code;
@@ -43,14 +61,6 @@ public class Result<T> {
         this.data = data;
     }
 
-    public static Integer getOK() {
-        return OK;
-    }
-
-    public static Integer getERROR() {
-        return ERROR;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -59,20 +69,11 @@ public class Result<T> {
         this.url = url;
     }
 
-    public String getServerTime() {
+    public Date getServerTime() {
         return serverTime;
     }
 
-    public void setServerTime(String serverTime) {
+    public void setServerTime(Date serverTime) {
         this.serverTime = serverTime;
-    }
-
-    public static <T> Result<T> Success(T data){
-        Result result = new Result();
-        result.setCode(OK);
-        result.setMessage("请求成功");
-        result.setData(data);
-        result.setServerTime(DateUtil.convertDateToStr(new Date(),"yyyy-MM-dd hh:mm:ss"));
-        return result;
     }
 }
